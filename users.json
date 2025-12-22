@@ -1,0 +1,18 @@
+[
+  {
+    "username": "NIKITA",
+    "password": "$2b$10$l/EnDrOh/GbYrVFEukKEQ./iAy7i4MehV0MCE0pZmnUUCzQSr7R4m",
+    "date": "2025-04-23",
+    "aadhar": "787678989090",
+    "phone": "7687898789",
+    "userType": "user"
+  },
+  {
+    "username": "Mayank",
+    "password": "$2b$10$nfwm261z28noR8/6vSskQeodQ7JbeZnDmoyUvuFx3TEGwYKiHa7VG",
+    "date": "2025-05-14",
+    "aadhar": "455000456789",
+    "phone": "7687898789",
+    "userType": "user"
+  }
+]
