@@ -136,10 +136,19 @@ logoutBtn.addEventListener('click', (e) => {
     }
 });
 
-// Check if user is logged in
-window.addEventListener('load', () => {
-    const userType = sessionStorage.getItem('userType');
-    if (!userType || userType !== 'user') {
+// Check if user is logged in using server session
+window.addEventListener('load', async () => {
+    try {
+        const resp = await fetch('/check-auth', { credentials: 'include' });
+        const data = await resp.json();
+        if (!data.authenticated) {
+            window.location.href = 'loginSignin.html';
+            return;
+        }
+        // Optionally sync sessionStorage for client-side checks
+        if (data.userType) sessionStorage.setItem('userType', data.userType);
+        if (data.username) sessionStorage.setItem('username', data.username);
+    } catch (e) {
         window.location.href = 'loginSignin.html';
     }
 });

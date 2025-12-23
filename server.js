@@ -30,6 +30,8 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
+// Serve static files from the project root as well, so top-level HTML files are accessible
+app.use(express.static(path.join(__dirname)));
 app.use(session({
     secret: "supersecretkey",
     resave: false,
@@ -90,6 +92,10 @@ app.post("/signup", async (req, res) => {
   try {
       const { username, password, date, aadhar, phone, userType } = req.body;
 
+      if (!username || !password) {
+          return res.status(400).json({ message: "Username and password are required" });
+      }
+
       // Check if the user already exists
       const existingUser = await User.findOne({ username });
       if (existingUser) {
@@ -117,6 +123,9 @@ app.post("/signup", async (req, res) => {
 
   } catch (error) {
       console.error("Error in signup route:", error);
+      if (error && error.code === 11000) {
+          return res.status(400).json({ message: "Username already exists" });
+      }
       res.status(500).json({ message: "Internal server error" });
   }
 });
@@ -154,7 +163,10 @@ app.post("/signin", async (req, res) => {
       };
 
       // Determine redirect URL based on user type
-      const redirectUrl = user.userType === 'admin' ? '/adminDashboard.html' : (user.userType === 'guest' ? '/guestDashboard.html' : '/dashboard.html'); // Adjust paths as needed
+      const relativePath = user.userType === 'admin' ? '/adminDashboard.html' : (user.userType === 'guest' ? '/guestDashboard.html' : '/dashboard.html');
+      // Build absolute URL so redirect works even if login page was opened from another origin
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const redirectUrl = `${baseUrl}${relativePath}`;
 
       // Send successful response with redirect URL
       res.status(200).json({ success: true, message: "Sign-in successful", user: { username: user.username, userType: user.userType }, redirect: redirectUrl });

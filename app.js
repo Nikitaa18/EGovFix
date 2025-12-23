@@ -13,39 +13,6 @@ sign_in_btn.addEventListener("click", () => {
 });
 
 
-// Handle Sign Up
-signUpForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const username = document.querySelector("#signup-username").value;
-  const password = document.querySelector("#signup-password").value;
-  const date = document.querySelector("#signup-date").value;
-  const aadhar = document.querySelector("#signup-aadhar").value;
-  const phone = document.querySelector("#signup-phone").value;
-
-  try {
-    console.log("Sending signup request...");
-    const response = await fetch("http://localhost:3000/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password, date, aadhar, phone }),
-    });
-
-    const data = await response.json();
-    console.log("Server response:", data);
-    
-    if (response.ok) {
-      alert("Registration successful! Please login.");
-      window.location.href = "loginSignin.html";
-    } else {
-      alert(data.message || "Registration failed. Please try again.");
-    }
-  } catch (error) {
-    console.error("Error during signup:", error);
-    alert("An error occurred. Please try again later.");
-  }
-});
-
 // Handle Sign In
 // Assuming you have a sign-in form element and an event listener
 signInForm.addEventListener("submit", async (event) => {
